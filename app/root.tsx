@@ -1,4 +1,9 @@
-import { LinksFunction } from "@remix-run/node";
+import {
+  json,
+  LinksFunction,
+  LoaderFunction,
+  LoaderFunctionArgs,
+} from "@remix-run/node";
 import {
   Links,
   Meta,
@@ -18,6 +23,26 @@ import PurchasedMessage from "./common/components/PurchasedMessage";
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
 ];
+
+// export const headers: HeadersFunction = ({ loaderHeaders }) => {
+//   console.log("HEADERS", loaderHeaders.getSetCookie());
+//   return {
+//     "Cache-Control": loaderHeaders.get("Cache-Control"),
+//   };
+// };
+
+export const loader: LoaderFunction = async ({
+  request,
+}: LoaderFunctionArgs) => {
+  // const headers = request.headers;
+  // console.log(request.headers);
+  // const cookieHeader = headers.get("cookies");
+  // console.log(cookieHeader);
+  // console.log(request);
+  // console.log("cookieHeader", cookieHeader);
+
+  return json({});
+};
 
 export default function App() {
   return (
