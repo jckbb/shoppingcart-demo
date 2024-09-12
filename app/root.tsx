@@ -13,6 +13,7 @@ import { store } from "./store";
 import Header from "./common/components/Header";
 import CartTab from "./common/components/CartTab";
 import { Suspense } from "react";
+import PurchasedMessage from "./common/components/PurchasedMessage";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -52,6 +53,7 @@ export default function App() {
           <Header />
           <Outlet />
           <CartTab />
+          <PurchasedMessage />
           <ScrollRestoration />
           <Scripts />
         </Provider>

@@ -5,6 +5,7 @@ const initialState = {
   //     : [],
   items: [],
   statusTab: false,
+  hasPurchased: false,
 };
 const cartSlice = createSlice({
   name: "cart",
@@ -44,9 +45,24 @@ const cartSlice = createSlice({
         state.statusTab = false;
       }
     },
+    checkoutComplete(state) {
+      // clear
+      state.items = [];
+      state.statusTab = false;
+      state.hasPurchased = true;
+    },
+    dismissPurchasedToast(state) {
+      state.hasPurchased = false;
+    },
   },
 });
 
-export const { addToCart, changeQuantity, toggleStatusTab } = cartSlice.actions;
+export const {
+  dismissPurchasedToast,
+  addToCart,
+  changeQuantity,
+  toggleStatusTab,
+  checkoutComplete,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

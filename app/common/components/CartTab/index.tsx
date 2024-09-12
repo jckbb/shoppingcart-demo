@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import CartItem from "./CartItem";
-import { toggleStatusTab } from "~/store/cartSlice";
+import { checkoutComplete, toggleStatusTab } from "~/store/cartSlice";
 
 const CartTab = () => {
   const carts = useSelector(({ cart }) => cart.items);
@@ -9,6 +9,12 @@ const CartTab = () => {
   const handleCloseTabCart = () => {
     dispatch(toggleStatusTab());
   };
+
+  const handleCheckout = () => {
+    // clear
+    dispatch(checkoutComplete());
+  };
+
   return (
     <div
       className={`fixed top-0 right-0 bg-gray-700 shadow-2xl w-96 h-full grid grid-rows-[60px_1fr_60px] 
@@ -26,7 +32,9 @@ const CartTab = () => {
         <button className="bg-black text-white" onClick={handleCloseTabCart}>
           CLOSE
         </button>
-        <button className="bg-amber-600 text-white">CHECKOUT</button>
+        <button onClick={handleCheckout} className="bg-amber-600 text-white">
+          CHECKOUT
+        </button>
       </div>
     </div>
   );
