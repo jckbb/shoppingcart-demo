@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import CartItem from "./CartItem";
 import { checkoutComplete, toggleStatusTab } from "~/store/cartSlice";
+import { Link } from "@remix-run/react";
 
 const CartTab = () => {
   const carts = useSelector(({ cart }) => cart.items);
@@ -32,9 +33,9 @@ const CartTab = () => {
         <button className="bg-black text-white" onClick={handleCloseTabCart}>
           CLOSE
         </button>
-        <button onClick={handleCheckout} className="bg-amber-600 text-white">
-          CHECKOUT
-        </button>
+        <Link to="/payment">
+          <button className="bg-amber-600 text-white">CHECKOUT</button>
+        </Link>
       </div>
     </div>
   );
