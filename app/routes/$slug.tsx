@@ -36,7 +36,11 @@ const Detail = () => {
       <h2 className="text-3xl text-center">PRODUCT DETAIL</h2>
       <div className="grid grid-cols-2 gap-5 mt-5">
         <div>
-          <img src={detail.image} alt="" className="w-full" />
+          <img
+            src={detail.image}
+            alt=""
+            className="w-full object-contain object-top"
+          />
         </div>
         <div className="flex flex-col gap-5">
           <h1 className="text-4xl uppercase font-bold">{detail.name}</h1>
