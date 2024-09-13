@@ -40,7 +40,7 @@ export const loader: LoaderFunction = async ({
   if (myCookieData._axwrt) {
     // add cookie without underscore
     cookie = {
-      "Set-Cookie": `axwrt=${myCookieData._axwrt}; Path=/; HttpOnly; Max-Age=${expirationTime}; Domain=.getfeedbackcare.com;`,
+      "Set-Cookie": `axwrt=${myCookieData._axwrt}; Path=/; HttpOnly; Expires=${expirationTime}; Domain=.getfeedbackcare.com; SameSite=Lax;`,
     };
   }
   return json(
