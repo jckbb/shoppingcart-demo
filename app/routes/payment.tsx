@@ -1,19 +1,26 @@
-import { ActionFunction, redirect } from "@remix-run/node";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { AxonEvents, pushToDatalayer } from "~/utils/axon";
+import { products } from "../products";
+import { useSelector } from "react-redux";
+import { useFetcher, useLoaderData } from "@remix-run/react";
+import { uuid } from "uuidv4";
 
-export const action: ActionFunction = async () => {
-  console.log("hit");
-  return redirect("/");
+export const loader = async () => {
+  return {
+    userId: uuid(),
+  };
 };
 
 const Payment = () => {
+  const { userId } = useLoaderData();
+  const fetcher = useFetcher();
   const [formData, setFormData] = useState({
-    name: "",
-    cardNumber: "",
-    expiration: "",
-    cvc: "",
+    name: "John D Doe",
+    cardNumber: "12312341234",
+    expiration: "1243",
+    cvc: "321",
   });
-
+  const carts = useSelector(({ cart }) => cart.items);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -22,18 +29,43 @@ const Payment = () => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-    // You can add payment processing logic here
-  };
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+
+      if (carts.length <= 0) return;
+
+      let sumPrice = 0;
+      let items = [];
+
+      carts.forEach((cart) => {
+        const product = products.find((obj) => obj.id === cart.productId);
+        sumPrice += product.price;
+        items.push({
+          item_id: product.id,
+          item_name: product.name,
+          item_category: "chair",
+          price: product.price,
+          quantity: cart.quantity,
+        });
+      });
+      // GTM Axon checkout
+      pushToDatalayer(AxonEvents.purchaseClick, {
+        transaction_id: new Date().getTime().toString(),
+        items: items,
+        value: sumPrice,
+        user_id: userId,
+      });
+    },
+    [carts, userId]
+  );
 
   return (
     <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg p-6">
       <h2 className="text-2xl font-semibold text-center mb-6">
         Payment Information
       </h2>
-      <form method="post" action="/payment">
+      <fetcher.Form method="POST" onSubmit={handleSubmit}>
         <div className="mb-4">
           <label
             htmlFor="name"
@@ -115,7 +147,7 @@ const Payment = () => {
         >
           Submit Payment
         </button>
-      </form>
+      </fetcher.Form>
     </div>
   );
 };

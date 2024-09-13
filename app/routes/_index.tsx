@@ -1,9 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
-import ProductCart from "~/common/components/ProductCart";
-import { products } from "~/products";
-
-const hotProducts = products.splice(0, 3);
 
 export const meta: MetaFunction = () => {
   return [
@@ -15,19 +11,15 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   return (
     <div>
-      <section>
-        <h1>Hero Page</h1>
-      </section>
-      <section>
-        <h3 className="text-[1.5rem]">Popular</h3>
-        {/* <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-5">
-          {hotProducts.map((product, key) => (
-            <ProductCart key={key} data={product} />
-          ))}
-        </div> */}
-        <Link to="/collection">
-          <span>See More</span>
-        </Link>
+      <section className="h-screen w-screen bg-slate-200">
+        <h1 className="text-[5rem] text-center font-sans font-bold">
+          Welcome!
+        </h1>
+        <div className="flex justify-center">
+          <Link to="/collection">
+            <h2 className="underline">See our Collection</h2>
+          </Link>
+        </div>
       </section>
     </div>
   );

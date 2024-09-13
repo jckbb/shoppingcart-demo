@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import iconCart from "../../../assets/iconCart.png";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addToCart } from "~/store/cartSlice";
+import { AxonEvents, pushToDatalayer } from "~/utils/axon";
 
 interface Props {
   data: {
@@ -19,6 +20,18 @@ const ProductCart = (props: Props) => {
 
   const dispatch = useDispatch();
   const handleAddToCart = () => {
+    pushToDatalayer(AxonEvents.addToCartClick, {
+      value: price,
+      items: [
+        {
+          item_id: id,
+          item_name: name,
+          item_category: "chair",
+          price: price,
+          quantity: 1,
+        },
+      ],
+    });
     dispatch(
       addToCart({
         productId: id,
@@ -36,12 +49,18 @@ const ProductCart = (props: Props) => {
           className="w-full h-80 object-contain object-top drop-shadow-[0_80px_30px_#0007]"
         />
       </Link>
-      <h3 className="text-2xl py-3 text-center font-medium">{name}</h3>
+      <h3 id="product_name" className="text-2xl py-3 text-center font-medium">
+        {name}
+      </h3>
       <div className="flex justify-between items-center">
         <p>
-          $<span className="text-2xl font-medium">{price}</span>
+          $
+          <span id="product_price" className="text-2xl font-medium">
+            {price}
+          </span>
         </p>
         <button
+          id="add_to_cart"
           className="bg-gray-300 p-2 rounded-md text-sm hover:bg-gray-400 flex gap-2"
           onClick={handleAddToCart}
         >

@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { products } from "../products";
 import { useDispatch } from "react-redux";
 import { addToCart } from "~/store/cartSlice";
+import { AxonEvents, pushToDatalayer } from "~/utils/axon";
 
 const Detail = () => {
   const { slug } = useParams();
@@ -11,10 +12,21 @@ const Detail = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(slug);
     const findDetail = products.filter((product) => product.slug === slug);
     if (findDetail.length > 0) {
-      setDetail(findDetail[0]);
+      const productDetails = findDetail[0];
+      pushToDatalayer(AxonEvents.viewProduct, {
+        items: [
+          {
+            item_id: productDetails.id,
+            item_name: productDetails.name,
+            item_category: "chair",
+            price: productDetails.price,
+            quantity: 1,
+          },
+        ],
+      });
+      setDetail(productDetails);
     } else {
       window.location.href = "/";
     }
@@ -27,6 +39,19 @@ const Detail = () => {
     setQuantity(quantity + 1);
   };
   const handleAddToCart = () => {
+    // GTM add to cart
+    pushToDatalayer(AxonEvents.addToCartClick, {
+      value: detail.price,
+      items: [
+        {
+          item_id: detail.id,
+          item_name: detail.name,
+          item_category: "chair",
+          price: detail.price,
+          quantity: 1,
+        },
+      ],
+    });
     dispatch(
       addToCart({
         productId: detail.id,
@@ -34,6 +59,7 @@ const Detail = () => {
       })
     );
   };
+
   return (
     <div>
       <h2 className="text-3xl text-center">PRODUCT DETAIL</h2>
@@ -67,6 +93,7 @@ const Detail = () => {
               </button>
             </div>
             <button
+              id="add_to_cart"
               className="bg-slate-900 text-white px-7 py-3 rounded-xl shadow-2xl"
               onClick={handleAddToCart}
             >

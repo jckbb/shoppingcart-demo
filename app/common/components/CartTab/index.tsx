@@ -1,7 +1,10 @@
 import { useSelector, useDispatch } from "react-redux";
 import CartItem from "./CartItem";
-import { checkoutComplete, toggleStatusTab } from "~/store/cartSlice";
+import { toggleStatusTab } from "~/store/cartSlice";
 import { Link } from "@remix-run/react";
+import { AxonEvents, pushToDatalayer } from "~/utils/axon";
+import { products } from "../../../products";
+import { useCallback } from "react";
 
 const CartTab = () => {
   const carts = useSelector(({ cart }) => cart.items);
@@ -11,10 +14,29 @@ const CartTab = () => {
     dispatch(toggleStatusTab());
   };
 
-  const handleCheckout = () => {
-    // clear
-    dispatch(checkoutComplete());
-  };
+  const handleCheckout = useCallback(() => {
+    // close side drawer
+    dispatch(toggleStatusTab());
+    // add to datalayer
+    let sumPrice = 0;
+    let items = [];
+    carts.forEach((cart) => {
+      const product = products.find((obj) => obj.id === cart.productId);
+      sumPrice += product.price;
+      items.push({
+        item_id: product.id,
+        item_name: product.name,
+        item_category: "chair",
+        price: product.price,
+        quantity: cart.quantity,
+      });
+    });
+    // GTM Axon begin checkout
+    pushToDatalayer(AxonEvents.beginCheckoutClick, {
+      value: sumPrice,
+      items: items,
+    });
+  }, [carts, dispatch]);
 
   return (
     <div
@@ -34,7 +56,9 @@ const CartTab = () => {
           CLOSE
         </button>
         <Link to="/payment">
-          <button className="bg-amber-600 text-white">CHECKOUT</button>
+          <button onClick={handleCheckout} className="bg-amber-600 text-white">
+            CHECKOUT
+          </button>
         </Link>
       </div>
     </div>
