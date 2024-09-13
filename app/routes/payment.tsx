@@ -1,9 +1,10 @@
 import { useCallback, useState } from "react";
 import { AxonEvents, pushToDatalayer } from "~/utils/axon";
 import { products } from "../products";
-import { useSelector } from "react-redux";
-import { useFetcher, useLoaderData } from "@remix-run/react";
+import { useDispatch, useSelector } from "react-redux";
+import { redirect, useFetcher, useLoaderData } from "@remix-run/react";
 import { uuid } from "uuidv4";
+import { checkoutComplete } from "~/store/cartSlice";
 
 export const loader = async () => {
   return {
@@ -12,6 +13,7 @@ export const loader = async () => {
 };
 
 const Payment = () => {
+  const dispatch = useDispatch();
   const { userId } = useLoaderData();
   const fetcher = useFetcher();
   const [formData, setFormData] = useState({
@@ -58,8 +60,9 @@ const Payment = () => {
         tax: sumPrice * 0.1,
         shipping: 7.99,
       });
+      dispatch(checkoutComplete());
     },
-    [carts, userId]
+    [carts, dispatch, userId]
   );
 
   return (
@@ -144,6 +147,7 @@ const Payment = () => {
         </div>
 
         <button
+          id="purchase"
           type="submit"
           className="w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-200"
         >

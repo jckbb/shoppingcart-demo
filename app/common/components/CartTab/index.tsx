@@ -56,7 +56,11 @@ const CartTab = () => {
           CLOSE
         </button>
         <Link to="/payment">
-          <button onClick={handleCheckout} className="bg-amber-600 text-white">
+          <button
+            id="begin_checkout"
+            onClick={handleCheckout}
+            className="bg-amber-600 text-white"
+          >
             CHECKOUT
           </button>
         </Link>

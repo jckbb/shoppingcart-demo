@@ -40,7 +40,6 @@ const cartSlice = createSlice({
     toggleStatusTab(state) {
       if (state.statusTab === false) {
         state.statusTab = true;
-        console.log("show me");
       } else {
         state.statusTab = false;
       }
