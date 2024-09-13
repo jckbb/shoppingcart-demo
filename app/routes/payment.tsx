@@ -55,6 +55,8 @@ const Payment = () => {
         items: items,
         value: sumPrice,
         user_id: userId,
+        tax: sumPrice * 0.1,
+        shipping: 7.99,
       });
     },
     [carts, userId]

@@ -35,7 +35,6 @@ export const loader: LoaderFunction = async ({
     : {};
 
   const expirationTime = new Date(Date.now() + 31536000000);
-
   let cookie = {};
   if (myCookieData._axwrt) {
     // add cookie without underscore
@@ -43,6 +42,7 @@ export const loader: LoaderFunction = async ({
       "Set-Cookie": `axwrt=${myCookieData._axwrt}; Path=/; HttpOnly; Expires=${expirationTime}; Domain=.getfeedbackcare.com; SameSite=Lax;`,
     };
   }
+
   return json(
     {},
     {
